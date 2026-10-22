@@ -6,11 +6,11 @@ import 'package:fl_clash/ui/icons/icons.dart';
 import 'package:fl_clash/ui/ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'config.dart';
 import 'session.dart';
 import 'profiles.dart';
+import 'portal_view.dart';
 
 class NailuAccountBanner extends ConsumerWidget {
   const NailuAccountBanner({super.key});
@@ -71,10 +71,13 @@ class _NailuAccountViewState extends ConsumerState<NailuAccountView> {
     }
   }
 
-  Future<void> _open(Uri uri) async {
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      throw StateError('Cannot launch browser');
-    }
+  Future<void> _portal(String route, String title) async {
+    await showExtend<void>(
+      context,
+      props: const ExtendProps(forceFull: true),
+      builder: (_) => NailuPortalView(route: route, title: title),
+    );
+    if (mounted && _session.phase == NailuPhase.signedIn) await _sync();
   }
 
   Future<void> _sync() async {
@@ -143,13 +146,13 @@ class _NailuAccountViewState extends ConsumerState<NailuAccountView> {
                 _button(
                   strings.nailuPlans,
                   () => unawaited(
-                    _run(() => _open(Uri.parse(NailuConfig.plans))),
+                    _run(() => _portal('plans', strings.nailuPlans)),
                   ),
                 ),
                 _button(
                   strings.nailuSupport,
                   () => unawaited(
-                    _run(() => _open(Uri.parse(NailuConfig.support))),
+                    _run(() => _portal('tickets', strings.nailuSupport)),
                   ),
                 ),
               ],

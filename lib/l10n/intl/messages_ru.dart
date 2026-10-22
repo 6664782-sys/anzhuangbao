@@ -1233,12 +1233,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "nailuChallengeFailed": MessageLookupByLibrary.simpleMessage(
       "Verification could not load. Check your connection and retry.",
     ),
+    "nailuChannelPending": MessageLookupByLibrary.simpleMessage(
+      "The channel address has not been configured yet.",
+    ),
     "nailuConfirmBrowser": MessageLookupByLibrary.simpleMessage(
       "Complete sign-in and approve in your browser. Confirm that this code matches the website.",
     ),
     "nailuConnectionError": MessageLookupByLibrary.simpleMessage(
       "Cannot reach your account. Refresh or sign in again.",
     ),
+    "nailuDevices": MessageLookupByLibrary.simpleMessage("My devices"),
+    "nailuDiagnostics": MessageLookupByLibrary.simpleMessage("Diagnostics"),
     "nailuEmail": MessageLookupByLibrary.simpleMessage("Email"),
     "nailuEmailInvalid": MessageLookupByLibrary.simpleMessage(
       "Enter a valid email address",
@@ -1247,6 +1252,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "nailuForgotPassword": MessageLookupByLibrary.simpleMessage(
       "Forgot password?",
     ),
+    "nailuGift": MessageLookupByLibrary.simpleMessage("Gift cards"),
+    "nailuGuide": MessageLookupByLibrary.simpleMessage("User guide"),
+    "nailuHeroHint": MessageLookupByLibrary.simpleMessage(
+      "Your world, connected with NaiLu.",
+    ),
+    "nailuHeroTitle": MessageLookupByLibrary.simpleMessage(
+      "A little taller. A little further.",
+    ),
+    "nailuInvite": MessageLookupByLibrary.simpleMessage("Invite friends"),
     "nailuLogin": MessageLookupByLibrary.simpleMessage("Sign in with NaiLu"),
     "nailuLoginFailed": MessageLookupByLibrary.simpleMessage(
       "Sign-in failed. Check your email, password and connection, then verify again.",
@@ -1261,13 +1275,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "nailuNoPlan": MessageLookupByLibrary.simpleMessage(
       "No active subscription. Choose a plan on the website.",
     ),
+    "nailuNodes": MessageLookupByLibrary.simpleMessage("Node status"),
+    "nailuNotices": MessageLookupByLibrary.simpleMessage("Announcements"),
     "nailuOpenBrowser": MessageLookupByLibrary.simpleMessage(
       "Open authorization page",
     ),
+    "nailuOrders": MessageLookupByLibrary.simpleMessage("My orders"),
     "nailuPassword": MessageLookupByLibrary.simpleMessage("Password"),
     "nailuPasswordRequired": MessageLookupByLibrary.simpleMessage(
       "Enter your password",
     ),
+    "nailuPayment": MessageLookupByLibrary.simpleMessage("Secure payment"),
     "nailuPlans": MessageLookupByLibrary.simpleMessage("Plans and renewal"),
     "nailuRegister": MessageLookupByLibrary.simpleMessage("Create account"),
     "nailuRegistrationHint": MessageLookupByLibrary.simpleMessage(
@@ -1282,11 +1300,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "nailuRetryVerification": MessageLookupByLibrary.simpleMessage(
       "Reload verification",
     ),
+    "nailuServices": MessageLookupByLibrary.simpleMessage("NaiLu services"),
+    "nailuServicesHint": MessageLookupByLibrary.simpleMessage(
+      "Plans, payments and account services stay in sync with the NaiLu website.",
+    ),
     "nailuSupport": MessageLookupByLibrary.simpleMessage("Support"),
     "nailuSync": MessageLookupByLibrary.simpleMessage("Sync subscription"),
     "nailuSyncComplete": MessageLookupByLibrary.simpleMessage(
       "Subscription synced. Choose a node and connect.",
     ),
+    "nailuTelegram": MessageLookupByLibrary.simpleMessage("Telegram channel"),
     "nailuTraffic": MessageLookupByLibrary.simpleMessage("Traffic used"),
     "nailuVerification": MessageLookupByLibrary.simpleMessage(
       "Cloudflare verification",

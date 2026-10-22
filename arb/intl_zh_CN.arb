@@ -971,5 +971,20 @@
   "nailuRememberPassword": "记住账号和密码",
   "nailuRememberPasswordHint": "仅在本机安全保存，可随时取消",
   "nailuBackToLogin": "返回登录",
-  "nailuRegistrationHint": "在下方完成官网注册与安全验证，成功后返回登录即可。"
+  "nailuRegistrationHint": "在下方完成官网注册与安全验证，成功后返回登录即可。",
+  "nailuServices": "商城与服务",
+  "nailuServicesHint": "套餐、支付、订单与账户服务，和奈鹿官网保持同步。",
+  "nailuPayment": "安全支付",
+  "nailuOrders": "我的订单",
+  "nailuNotices": "消息公告",
+  "nailuInvite": "邀请好友",
+  "nailuGift": "礼品卡",
+  "nailuGuide": "使用指南",
+  "nailuDevices": "我的设备",
+  "nailuNodes": "节点状态",
+  "nailuDiagnostics": "自助诊断",
+  "nailuTelegram": "TG 频道",
+  "nailuChannelPending": "频道地址尚未设置，敬请期待。",
+  "nailuHeroTitle": "抬头，是更大的世界。",
+  "nailuHeroHint": "奈鹿陪你，轻松连接每一程。"
 }

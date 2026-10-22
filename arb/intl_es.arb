@@ -971,5 +971,20 @@
   "nailuRememberPassword": "Remember email and password",
   "nailuRememberPasswordHint": "Saved securely on this device; uncheck to remove",
   "nailuBackToLogin": "Back to sign in",
-  "nailuRegistrationHint": "Register and complete verification below, then return to sign in."
+  "nailuRegistrationHint": "Register and complete verification below, then return to sign in.",
+  "nailuServices": "NaiLu services",
+  "nailuServicesHint": "Plans, payments and account services stay in sync with the NaiLu website.",
+  "nailuPayment": "Secure payment",
+  "nailuOrders": "My orders",
+  "nailuNotices": "Announcements",
+  "nailuInvite": "Invite friends",
+  "nailuGift": "Gift cards",
+  "nailuGuide": "User guide",
+  "nailuDevices": "My devices",
+  "nailuNodes": "Node status",
+  "nailuDiagnostics": "Diagnostics",
+  "nailuTelegram": "Telegram channel",
+  "nailuChannelPending": "The channel address has not been configured yet.",
+  "nailuHeroTitle": "A little taller. A little further.",
+  "nailuHeroHint": "Your world, connected with NaiLu."
 }

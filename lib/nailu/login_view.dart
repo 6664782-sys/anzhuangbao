@@ -116,7 +116,10 @@ class _NailuLoginViewState extends State<NailuLoginView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: 16,
                   children: [
-                    SvgPicture.asset('assets/images/nailu.svg', height: 72),
+                    SvgPicture.asset(
+                      'assets/images/nailu-giraffe.svg',
+                      height: 112,
+                    ),
                     Text(
                       NailuConfig.name,
                       textAlign: TextAlign.center,

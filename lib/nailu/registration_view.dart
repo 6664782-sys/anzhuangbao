@@ -106,6 +106,7 @@ class _NailuRegistrationViewState extends State<NailuRegistrationView> {
                         }
                         final uri = navigation.request.url;
                         return uri != null &&
+                                uri.scheme == 'https' &&
                                 uri.origin == NailuConfig.origin &&
                                 uri.userInfo.isEmpty &&
                                 uri.port == 443

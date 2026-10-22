@@ -1,4 +1,5 @@
 import 'package:fl_clash/nailu/account_view.dart';
+import 'package:fl_clash/nailu/services_view.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/l10n/l10n.dart';
@@ -77,6 +78,13 @@ class _ToolViewState extends ConsumerState<ToolsView> {
     );
     final items = [
       const NailuAccountBanner(),
+      Card(
+        child: ListItem.open(
+          title: Text(context.appLocalizations.nailuServices),
+          leading: const GlyphIcon(AppGlyphs.profiles),
+          widget: const NailuServicesView(),
+        ),
+      ),
       Consumer(
         builder: (_, ref, _) {
           final state = ref.watch(moreToolsSelectorStateProvider);

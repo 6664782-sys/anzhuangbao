@@ -1,4 +1,4 @@
-import 'package:fl_clash/nailu/account_view.dart';
+import 'package:fl_clash/nailu/home_header.dart';
 import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
@@ -84,7 +84,7 @@ class _DashboardViewState extends ConsumerState<DashboardView> {
       // The providers learn a resize a frame late, too late for the cards.
       body: Column(
         children: [
-          const NailuAccountBanner(),
+          const NailuHomeHeader(),
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {

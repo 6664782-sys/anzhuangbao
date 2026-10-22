@@ -8125,6 +8125,131 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `NaiLu services`
+  String get nailuServices {
+    return Intl.message(
+      'NaiLu services',
+      name: 'nailuServices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Plans, payments and account services stay in sync with the NaiLu website.`
+  String get nailuServicesHint {
+    return Intl.message(
+      'Plans, payments and account services stay in sync with the NaiLu website.',
+      name: 'nailuServicesHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Secure payment`
+  String get nailuPayment {
+    return Intl.message(
+      'Secure payment',
+      name: 'nailuPayment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My orders`
+  String get nailuOrders {
+    return Intl.message('My orders', name: 'nailuOrders', desc: '', args: []);
+  }
+
+  /// `Announcements`
+  String get nailuNotices {
+    return Intl.message(
+      'Announcements',
+      name: 'nailuNotices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invite friends`
+  String get nailuInvite {
+    return Intl.message(
+      'Invite friends',
+      name: 'nailuInvite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gift cards`
+  String get nailuGift {
+    return Intl.message('Gift cards', name: 'nailuGift', desc: '', args: []);
+  }
+
+  /// `User guide`
+  String get nailuGuide {
+    return Intl.message('User guide', name: 'nailuGuide', desc: '', args: []);
+  }
+
+  /// `My devices`
+  String get nailuDevices {
+    return Intl.message('My devices', name: 'nailuDevices', desc: '', args: []);
+  }
+
+  /// `Node status`
+  String get nailuNodes {
+    return Intl.message('Node status', name: 'nailuNodes', desc: '', args: []);
+  }
+
+  /// `Diagnostics`
+  String get nailuDiagnostics {
+    return Intl.message(
+      'Diagnostics',
+      name: 'nailuDiagnostics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Telegram channel`
+  String get nailuTelegram {
+    return Intl.message(
+      'Telegram channel',
+      name: 'nailuTelegram',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The channel address has not been configured yet.`
+  String get nailuChannelPending {
+    return Intl.message(
+      'The channel address has not been configured yet.',
+      name: 'nailuChannelPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A little taller. A little further.`
+  String get nailuHeroTitle {
+    return Intl.message(
+      'A little taller. A little further.',
+      name: 'nailuHeroTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your world, connected with NaiLu.`
+  String get nailuHeroHint {
+    return Intl.message(
+      'Your world, connected with NaiLu.',
+      name: 'nailuHeroHint',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

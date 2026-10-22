@@ -344,6 +344,43 @@ class NailuSession extends ChangeNotifier {
         : null;
   }
 
+  Future<Uri> portalUri(String route) async {
+    const routes = {
+      'plans',
+      'orders',
+      'profile',
+      'tickets',
+      'notices',
+      'invite',
+      'gift',
+      'help',
+      'devices',
+      'traffic',
+      'nodes',
+      'diagnostics',
+    };
+    if (phase != NailuPhase.signedIn || !routes.contains(route)) {
+      throw StateError('A signed-in NaiLu account is required');
+    }
+    final epoch = _epoch;
+    final result = await _api.value(
+      'user/getQuickLoginUrl',
+      data: {'redirect': route},
+      authenticated: true,
+    );
+    if (result is! String || epoch != _epoch || phase != NailuPhase.signedIn) {
+      throw const NailuApiException('Cannot open account services');
+    }
+    final uri = Uri.parse(result);
+    if (uri.scheme != 'https' ||
+        uri.origin != NailuConfig.origin ||
+        uri.userInfo.isNotEmpty ||
+        uri.port != 443) {
+      throw const FormatException('Invalid account portal origin');
+    }
+    return uri.replace(queryParameters: {'nailu_client': '1'});
+  }
+
   Future<void> signOut() async {
     final epoch = ++_epoch;
     busy = true;

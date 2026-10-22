@@ -920,16 +920,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "nailuChallengeFailed": MessageLookupByLibrary.simpleMessage(
       "验证加载失败，请检查网络后重试。",
     ),
+    "nailuChannelPending": MessageLookupByLibrary.simpleMessage(
+      "频道地址尚未设置，敬请期待。",
+    ),
     "nailuConfirmBrowser": MessageLookupByLibrary.simpleMessage(
       "请在浏览器完成登录并确认授权，核对网页与这里的验证码一致。",
     ),
     "nailuConnectionError": MessageLookupByLibrary.simpleMessage(
       "账户连接暂不可用，请刷新或重新登录。",
     ),
+    "nailuDevices": MessageLookupByLibrary.simpleMessage("我的设备"),
+    "nailuDiagnostics": MessageLookupByLibrary.simpleMessage("自助诊断"),
     "nailuEmail": MessageLookupByLibrary.simpleMessage("邮箱账号"),
     "nailuEmailInvalid": MessageLookupByLibrary.simpleMessage("请输入有效的邮箱地址"),
     "nailuExpires": MessageLookupByLibrary.simpleMessage("到期日期"),
     "nailuForgotPassword": MessageLookupByLibrary.simpleMessage("忘记密码"),
+    "nailuGift": MessageLookupByLibrary.simpleMessage("礼品卡"),
+    "nailuGuide": MessageLookupByLibrary.simpleMessage("使用指南"),
+    "nailuHeroHint": MessageLookupByLibrary.simpleMessage("奈鹿陪你，轻松连接每一程。"),
+    "nailuHeroTitle": MessageLookupByLibrary.simpleMessage("抬头，是更大的世界。"),
+    "nailuInvite": MessageLookupByLibrary.simpleMessage("邀请好友"),
     "nailuLogin": MessageLookupByLibrary.simpleMessage("登录奈鹿账户"),
     "nailuLoginFailed": MessageLookupByLibrary.simpleMessage(
       "登录失败，请检查账号、密码和网络，并重新完成验证。",
@@ -938,9 +948,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "nailuLogout": MessageLookupByLibrary.simpleMessage("退出登录并移除订阅"),
     "nailuLongTerm": MessageLookupByLibrary.simpleMessage("长期有效"),
     "nailuNoPlan": MessageLookupByLibrary.simpleMessage("暂无有效套餐，请先在官网购买或续费。"),
+    "nailuNodes": MessageLookupByLibrary.simpleMessage("节点状态"),
+    "nailuNotices": MessageLookupByLibrary.simpleMessage("消息公告"),
     "nailuOpenBrowser": MessageLookupByLibrary.simpleMessage("打开授权页面"),
+    "nailuOrders": MessageLookupByLibrary.simpleMessage("我的订单"),
     "nailuPassword": MessageLookupByLibrary.simpleMessage("密码"),
     "nailuPasswordRequired": MessageLookupByLibrary.simpleMessage("请输入密码"),
+    "nailuPayment": MessageLookupByLibrary.simpleMessage("安全支付"),
     "nailuPlans": MessageLookupByLibrary.simpleMessage("购买与续费"),
     "nailuRegister": MessageLookupByLibrary.simpleMessage("注册账户"),
     "nailuRegistrationHint": MessageLookupByLibrary.simpleMessage(
@@ -951,11 +965,16 @@ class MessageLookup extends MessageLookupByLibrary {
       "仅在本机安全保存，可随时取消",
     ),
     "nailuRetryVerification": MessageLookupByLibrary.simpleMessage("重新加载验证"),
+    "nailuServices": MessageLookupByLibrary.simpleMessage("商城与服务"),
+    "nailuServicesHint": MessageLookupByLibrary.simpleMessage(
+      "套餐、支付、订单与账户服务，和奈鹿官网保持同步。",
+    ),
     "nailuSupport": MessageLookupByLibrary.simpleMessage("联系客服"),
     "nailuSync": MessageLookupByLibrary.simpleMessage("同步专属订阅"),
     "nailuSyncComplete": MessageLookupByLibrary.simpleMessage(
       "订阅已同步，请选择节点后连接。",
     ),
+    "nailuTelegram": MessageLookupByLibrary.simpleMessage("TG 频道"),
     "nailuTraffic": MessageLookupByLibrary.simpleMessage("已用流量"),
     "nailuVerification": MessageLookupByLibrary.simpleMessage(
       "Cloudflare 安全验证",

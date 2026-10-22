@@ -7,6 +7,7 @@ abstract final class NailuConfig {
   static const register = '$origin/#/register';
   static const forgot = '$origin/#/forget';
   static const challenge = '$origin/nailu-client-challenge.html';
+  static const telegram = String.fromEnvironment('NAILU_TELEGRAM_URL');
   static const releaseRepository = String.fromEnvironment(
     'NAILU_RELEASE_REPOSITORY',
   );

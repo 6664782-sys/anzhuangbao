@@ -26,7 +26,7 @@ class NailuApi {
               headers: {
                 'Accept': 'application/json',
                 'Cache-Control': 'no-store',
-                'User-Agent': 'NaiLu/0.1.2',
+                'User-Agent': 'NaiLu/0.2.0',
               },
             ),
           );
@@ -35,6 +35,18 @@ class NailuApi {
   String? token;
 
   Future<Map<String, dynamic>> call(
+    String path, {
+    Map<String, dynamic>? data,
+    bool authenticated = false,
+  }) async {
+    final payload = await value(path, data: data, authenticated: authenticated);
+    if (payload is! Map) {
+      throw const NailuApiException('Invalid server response');
+    }
+    return Map<String, dynamic>.from(payload);
+  }
+
+  Future<dynamic> value(
     String path, {
     Map<String, dynamic>? data,
     bool authenticated = false,
@@ -48,11 +60,10 @@ class NailuApi {
           headers: {if (authenticated && token != null) 'Authorization': token},
         ),
       );
-      final payload = response.data?['data'];
-      if (payload is! Map) {
+      if (response.data?.containsKey('data') != true) {
         throw const NailuApiException('Invalid server response');
       }
-      return Map<String, dynamic>.from(payload);
+      return response.data!['data'];
     } on DioException catch (error) {
       final status = error.response?.statusCode;
       final payload = error.response?.data;

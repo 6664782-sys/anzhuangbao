@@ -60,6 +60,46 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test(
+    'account services use a short-lived backend URL and reject substituted origins',
+    () async {
+      var destination =
+          'https://nailu.pro/#/login?verify=00000000-0000-0000-0000-000000000001&redirect=plans';
+      final session = NailuSession(
+        store: _Store(),
+        api: _api((options) async {
+          if (options.path == 'passport/auth/login') {
+            return _json({
+              'data': {'auth_data': 'native-session'},
+            });
+          }
+          if (options.path == 'user/getQuickLoginUrl') {
+            expect(options.headers['Authorization'], 'native-session');
+            expect(options.data, {'redirect': 'plans'});
+            return _json({'data': destination});
+          }
+          return _json({'data': <String, dynamic>{}});
+        }),
+      );
+      await expectLater(session.portalUri('plans'), throwsStateError);
+      await session.login(
+        email: 'a@b.co',
+        password: 'pw',
+        challenge: 'verified',
+      );
+      final uri = await session.portalUri('plans');
+      expect(uri.queryParameters['nailu_client'], '1');
+      expect(uri.fragment, contains('verify='));
+      await expectLater(
+        session.portalUri('https://attacker.example'),
+        throwsStateError,
+      );
+      destination = 'https://attacker.example/#/login?verify=example';
+      await expectLater(session.portalUri('plans'), throwsFormatException);
+      session.dispose();
+    },
+  );
+
+  test(
     'remembered credentials survive logout and can be removed explicitly',
     () async {
       final store = _Store();
