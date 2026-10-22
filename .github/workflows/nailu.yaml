@@ -1,106 +1,114 @@
-name: NaiLu macOS builds
+name: NaiLu client builds
 
 on:
-  push:
-    branches: [main]
-    paths: ['.github/workflows/nailu.yaml', 'nailu.patch.gz']
   workflow_dispatch:
 
 permissions:
   contents: read
 
-jobs:
-  source:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    outputs:
-      commit: ${{ steps.source.outputs.commit }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Import NaiLu source once
-        id: source
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ ! -f pubspec.yaml ]; then
-            echo 'b8d71bf5660011636359251ad19b23777932bb66ed94b16b66fe48cbdcf3216d  nailu.patch.gz' | sha256sum --check
-            git init "$RUNNER_TEMP/nailu-source"
-            git -C "$RUNNER_TEMP/nailu-source" remote add upstream https://github.com/chen08209/FlClash.git
-            git -C "$RUNNER_TEMP/nailu-source" fetch --depth=1 upstream 8d4f9744948751f1273fe871e1d05276fac09b0e
-            git -C "$RUNNER_TEMP/nailu-source" checkout --detach FETCH_HEAD
-            gzip -dc nailu.patch.gz > "$RUNNER_TEMP/nailu.patch"
-            git -C "$RUNNER_TEMP/nailu-source" apply --binary "$RUNNER_TEMP/nailu.patch"
-            rsync -a --exclude=.git --exclude=.github/workflows/ "$RUNNER_TEMP/nailu-source/" ./
-            cp README.md README.upstream.md
-            cp NAILU.md README.md
-            git add -A
-            git update-index --add --cacheinfo 160000,8380d0e7462f061a964323e9bf3129a236fcc5d5,core/Clash.Meta
-            git -c user.name='NaiLu Build' -c user.email='295174040+6664782-sys@users.noreply.github.com' commit -m 'Import NaiLu branded client and nailu.pro account integration'
-            git push origin HEAD:main
-          fi
-          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+env:
+  FLUTTER_VERSION: '3.47.6'
+  GO_VERSION: '1.27.1'
 
-  macos:
-    needs: source
+jobs:
+  build:
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: macos-latest
+          - platform: android
+            os: ubuntu-latest
+            arch: all
+          - platform: windows
+            os: windows-2022
+            arch: x64
+          - platform: macos
+            os: macos-latest
             arch: arm64
-          - os: macos-15-intel
+          - platform: macos
+            os: macos-15-intel
             arch: x64
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ needs.source.outputs.commit }}
           submodules: recursive
       - uses: actions/setup-go@v5
         with:
-          go-version: '1.27.1'
+          go-version: ${{ env.GO_VERSION }}
           cache-dependency-path: core/go.sum
       - uses: dtolnay/rust-toolchain@stable
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.47.6'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
-      - name: Select Xcode
-        run: |
-          sudo xcode-select -s /Applications/Xcode_26.3.app || sudo xcode-select -s /Applications/Xcode_26.2.app
-          xcodebuild -version
-      - name: Intel renderer
-        if: matrix.arch == 'x64'
-        run: plutil -replace FLTEnableImpeller -bool NO macos/Runner/Info.plist
-      - name: Install dependencies
+      - uses: actions/setup-java@v4
+        if: matrix.platform == 'android'
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        if: matrix.platform == 'android'
+      - name: Android native tools
+        if: matrix.platform == 'android'
+        run: sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0' 'ndk;28.2.13676358'
+      - uses: NuGet/setup-nuget@v2
+        if: matrix.platform == 'windows'
+      - name: Flutter dependencies
         run: flutter pub get
       - name: Analyze
         run: flutter analyze --no-fatal-infos
-      - name: Build macOS
+      - name: Android signing
+        if: matrix.platform == 'android'
+        env:
+          KEYSTORE_BASE64: ${{ secrets.NAILU_ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/nailu-release.jks"
+            echo "NAILU_ANDROID_KEYSTORE=$RUNNER_TEMP/nailu-release.jks" >> "$GITHUB_ENV"
+          fi
+      - name: Build Android APK
+        if: matrix.platform == 'android'
+        env:
+          NAILU_ANDROID_STORE_PASSWORD: ${{ secrets.NAILU_ANDROID_STORE_PASSWORD }}
+          NAILU_ANDROID_KEY_PASSWORD: ${{ secrets.NAILU_ANDROID_KEY_PASSWORD }}
+          NAILU_ANDROID_KEY_ALIAS: ${{ secrets.NAILU_ANDROID_KEY_ALIAS }}
+        run: flutter build apk --release --split-per-abi
+      - name: Build Windows portable bundle
+        if: matrix.platform == 'windows'
+        run: flutter build windows --release
+      - name: Build Windows installer
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          $compilerRoot = Join-Path $env:RUNNER_TEMP 'nailu-inno'
+          $installer = Join-Path $env:RUNNER_TEMP 'innosetup-6.4.3.exe'
+          Invoke-WebRequest 'https://github.com/jrsoftware/issrc/releases/download/is-6_4_3/innosetup-6.4.3.exe' -OutFile $installer
+          $signature = Get-AuthenticodeSignature $installer
+          if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notmatch 'Pyrsys') { throw 'Compiler signature verification failed' }
+          $process = Start-Process $installer -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-', '/CURRENTUSER', "/DIR=$compilerRoot") -WindowStyle Hidden -Wait -PassThru
+          if ($process.ExitCode -ne 0) { throw 'Compiler installation failed' }
+          & tool/build-nailu-installer.ps1 -Iscc (Join-Path $compilerRoot 'ISCC.exe')
+      - name: Select macOS Xcode
+        if: matrix.platform == 'macos'
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app || sudo xcode-select -s /Applications/Xcode_26.2.app
+          xcodebuild -version
+      - name: Intel macOS renderer
+        if: matrix.platform == 'macos' && matrix.arch == 'x64'
+        run: plutil -replace FLTEnableImpeller -bool NO macos/Runner/Info.plist
+      - name: Build macOS app
+        if: matrix.platform == 'macos'
         run: flutter build macos --release
-      - name: Package app
-        run: |
-          mkdir -p dist
-          ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/NaiLu.app dist/NaiLu-0.1.2-macOS-${{ matrix.arch }}-unsigned.zip
-          hdiutil create -volname '奈鹿 NaiLu' -srcfolder build/macos/Build/Products/Release/NaiLu.app -ov -format UDZO dist/NaiLu-0.1.2-macOS-${{ matrix.arch }}-unsigned.dmg
-          shasum -a 256 dist/* > dist/SHA256SUMS.txt
+      - name: macOS unsigned distribution archive
+        if: matrix.platform == 'macos'
+        run: ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/NaiLu.app build/NaiLu-macOS-${{ matrix.arch }}-unsigned.zip
       - uses: actions/upload-artifact@v4
         with:
-          name: NaiLu-macOS-${{ matrix.arch }}
-          path: dist/
+          name: NaiLu-${{ matrix.platform }}-${{ matrix.arch }}
           if-no-files-found: error
-      - name: Prepare corresponding source
-        if: matrix.arch == 'arm64'
-        run: |
-          git archive --format=zip -o NaiLu-0.1.2-source.zip HEAD
-          git -C core/Clash.Meta archive --format=zip --prefix=core/Clash.Meta/ -o "$RUNNER_TEMP/nailu-core-source.zip" HEAD
-          python3 -c 'import os,zipfile; a=zipfile.ZipFile("NaiLu-0.1.2-source.zip","a"); b=zipfile.ZipFile(os.environ["RUNNER_TEMP"]+"/nailu-core-source.zip"); [a.writestr(i,b.read(i.filename)) for i in b.infolist() if not i.is_dir()]; a.close(); b.close()'
-      - uses: actions/upload-artifact@v4
-        if: matrix.arch == 'arm64'
-        with:
-          name: NaiLu-source
-          path: NaiLu-0.1.2-source.zip
-
+          path: |
+            build/app/outputs/flutter-apk/*.apk
+            build/windows/x64/runner/Release/
+            build/NaiLu-macOS-*-unsigned.zip
+            dist/*-setup.exe
