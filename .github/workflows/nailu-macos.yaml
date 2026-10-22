@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          echo '75ef00607d57636f7e11866be66241585323ef927da3d2ccfcdb6dbec7eb0a0c  nailu.patch.gz' | sha256sum --check
+          echo '75ef00607d57636f7e11866be66241585323ef927da3d2ccfcdb6dbec7eb0a0c  nailu.patch.gz' | shasum -a 256 -c
           if ! grep -q 'version: 0.3.0+2026102303' pubspec.yaml; then
             gzip -dc nailu.patch.gz > "$RUNNER_TEMP/nailu.patch"
             git apply --binary --exclude=.github/workflows/nailu.yaml "$RUNNER_TEMP/nailu.patch"
@@ -68,7 +68,7 @@ jobs:
         run: |
           mkdir -p dist
           ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/NaiLu.app dist/NaiLu-0.3.0-macOS-${{ matrix.arch }}-unsigned.zip
-          hdiutil create -volname '奈鹿 NaiLu' -srcfolder build/macos/Build/Products/Release/NaiLu.app -ov -format UDZO dist/NaiLu-0.3.0-macOS-${{ matrix.arch }}-unsigned.dmg
+          hdiutil create -volname '濂堥箍 NaiLu' -srcfolder build/macos/Build/Products/Release/NaiLu.app -ov -format UDZO dist/NaiLu-0.3.0-macOS-${{ matrix.arch }}-unsigned.dmg
           shasum -a 256 dist/* > dist/SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
