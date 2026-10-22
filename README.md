@@ -1,5 +1,7 @@
-# 奈鹿 NaiLu 客户端
+# 奈鹿 NaiLu
 
-基于 FlClash 二次开发，接入 https://nailu.pro。
+Android、Windows、macOS 客户端，基于 FlClash 开发，接入 nailu.pro。
 
-Android、Windows 已完成本地测试版构建；此仓库用于维护源码和构建 Apple Silicon、Intel 两种 macOS 客户端。保留 GPL-3.0 与上游作者署名。
+0.1.2：强制邮箱密码登录、Cloudflare 验证、App 内注册入口、可选安全记住密码、Windows 桌面安装与快捷方式。首次构建会导入完整源码，macOS 构建产物见 Actions。
+
+GPL-3.0；保留上游与第三方许可。签名密钥、服务器密码与 Cloudflare Secret Key 不包含在仓库内。
