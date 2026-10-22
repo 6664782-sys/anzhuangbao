@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'config.dart';
 import 'portal_view.dart';
+import 'plans_view.dart';
 
 class NailuServicesView extends StatelessWidget {
   const NailuServicesView({super.key});
@@ -41,7 +42,15 @@ class NailuServicesView extends StatelessWidget {
                 leading: GlyphIcon(glyph),
                 title: Text(title),
                 forceFull: true,
-                widget: NailuPortalView(route: route, title: title),
+                widget: route == 'plans'
+                    ? CommonScaffold(
+                        title: title,
+                        body: Padding(
+                          padding: EdgeInsets.only(top: context.appBarInset),
+                          child: const NailuPlansView(),
+                        ),
+                      )
+                    : NailuPortalView(route: route, title: title),
               ),
             ),
           Card(

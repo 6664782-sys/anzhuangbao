@@ -20,7 +20,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'pages/pages.dart';
+import 'nailu/shell.dart';
 
 Widget buildManagerStack({
   required bool isDesktop,
@@ -117,7 +117,12 @@ class ApplicationState extends ConsumerState<Application> {
       if (!mounted || _session.phase != NailuPhase.signedIn) return;
       globalState.navigatorKey.currentState?.popUntil((route) => route.isFirst);
       await bootstrap.attach();
-      final synced = await syncNailuProfile(ref, _session);
+      var synced = false;
+      try {
+        synced = await syncNailuProfile(ref, _session);
+      } catch (_) {
+        // Keep account services reachable when the subscription needs a retry.
+      }
       if (!mounted || _session.phase != NailuPhase.signedIn) return;
       if (synced) await bootstrap.initializeAccountStatus();
       _autoUpdateProfilesTaskTimer?.cancel();
@@ -256,7 +261,7 @@ class ApplicationState extends ConsumerState<Application> {
           ),
         );
       },
-      child: const HomePage(),
+      child: const NailuShell(),
     );
   }
 

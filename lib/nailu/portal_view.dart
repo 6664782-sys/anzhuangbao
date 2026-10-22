@@ -13,9 +13,17 @@ import 'session.dart';
 import 'web_environment.dart';
 
 class NailuPortalView extends ConsumerStatefulWidget {
-  const NailuPortalView({super.key, required this.route, required this.title});
+  const NailuPortalView({
+    super.key,
+    required this.route,
+    required this.title,
+    this.planId,
+    this.period,
+  });
   final String route;
   final String title;
+  final int? planId;
+  final String? period;
   @override
   ConsumerState<NailuPortalView> createState() => _NailuPortalViewState();
 }
@@ -35,13 +43,30 @@ class _NailuPortalViewState extends ConsumerState<NailuPortalView> {
   }
 
   Future<({Uri uri, String script})> _load() async {
-    final environment = _environment ?? await createNailuWebEnvironment();
+    _loadTimer?.cancel();
+    _loadTimer = Timer(const Duration(seconds: 30), () {
+      if (mounted && !_ready) setState(() => _failed = true);
+    });
+    final environment =
+        _environment ??
+        await createNailuWebEnvironment(
+          profile: 'services',
+        ).timeout(const Duration(seconds: 12));
     if (!mounted) {
       await environment?.dispose();
       throw StateError('Portal closed');
     }
     _environment = environment;
-    final uri = await ref.read(nailuSessionProvider).portalUri(widget.route);
+    var uri = await ref.read(nailuSessionProvider).portalUri(widget.route);
+    if (widget.planId != null && widget.period != null) {
+      uri = uri.replace(
+        queryParameters: {
+          ...uri.queryParameters,
+          'nailu_plan': '${widget.planId}',
+          'nailu_period': widget.period!,
+        },
+      );
+    }
     final script = await rootBundle.loadString('assets/data/nailu-portal.js');
     _loadTimer?.cancel();
     _loadTimer = Timer(const Duration(seconds: 30), () {
@@ -115,6 +140,13 @@ class _NailuPortalViewState extends ConsumerState<NailuPortalView> {
                       supportMultipleWindows: true,
                       javaScriptCanOpenWindowsAutomatically: true,
                     ),
+                    onLoadStop: (controller, url) async {
+                      if (url?.origin == NailuConfig.origin) {
+                        await controller.evaluateJavascript(
+                          source: snapshot.data!.script,
+                        );
+                      }
+                    },
                     onWebViewCreated: (controller) {
                       controller.addJavaScriptHandler(
                         handlerName: 'nailuPortal',

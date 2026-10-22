@@ -1004,27 +1004,53 @@ class MessageLookup extends MessageLookupByLibrary {
     "nailuAccountHint": MessageLookupByLibrary.simpleMessage(
       "Manage your NaiLu account and subscription",
     ),
+    "nailuAccountSettings": MessageLookupByLibrary.simpleMessage(
+      "Account management",
+    ),
     "nailuActionFailed": MessageLookupByLibrary.simpleMessage(
       "The operation could not be completed. Check your connection and try again.",
     ),
+    "nailuAll": MessageLookupByLibrary.simpleMessage("All"),
     "nailuBackToLogin": MessageLookupByLibrary.simpleMessage("Back to sign in"),
+    "nailuBalance": MessageLookupByLibrary.simpleMessage("Account balance"),
+    "nailuBillingPeriod": MessageLookupByLibrary.simpleMessage(
+      "Billing period",
+    ),
+    "nailuCatalogError": MessageLookupByLibrary.simpleMessage(
+      "Could not load plans. Check your connection and retry.",
+    ),
     "nailuChallengeFailed": MessageLookupByLibrary.simpleMessage(
       "Verification could not load. Check your connection and retry.",
     ),
     "nailuChannelPending": MessageLookupByLibrary.simpleMessage(
       "The channel address has not been configured yet.",
     ),
+    "nailuChoosePlan": MessageLookupByLibrary.simpleMessage(
+      "Continue to checkout",
+    ),
     "nailuConfirmBrowser": MessageLookupByLibrary.simpleMessage(
       "Complete sign-in and approve in your browser. Confirm that this code matches the website.",
     ),
+    "nailuConnect": MessageLookupByLibrary.simpleMessage("Connect"),
+    "nailuConnected": MessageLookupByLibrary.simpleMessage("Connected"),
+    "nailuConnecting": MessageLookupByLibrary.simpleMessage("Connecting…"),
     "nailuConnectionError": MessageLookupByLibrary.simpleMessage(
       "Cannot reach your account. Refresh or sign in again.",
     ),
+    "nailuDeviceLimit": MessageLookupByLibrary.simpleMessage("Device limit"),
     "nailuDevices": MessageLookupByLibrary.simpleMessage("My devices"),
     "nailuDiagnostics": MessageLookupByLibrary.simpleMessage("Diagnostics"),
+    "nailuDisconnect": MessageLookupByLibrary.simpleMessage("Disconnect"),
+    "nailuDisconnected": MessageLookupByLibrary.simpleMessage("Disconnected"),
     "nailuEmail": MessageLookupByLibrary.simpleMessage("Email"),
     "nailuEmailInvalid": MessageLookupByLibrary.simpleMessage(
       "Enter a valid email address",
+    ),
+    "nailuEmailPrivacy": MessageLookupByLibrary.simpleMessage(
+      "Show or hide email",
+    ),
+    "nailuExpireReminder": MessageLookupByLibrary.simpleMessage(
+      "Expiry email reminder",
     ),
     "nailuExpires": MessageLookupByLibrary.simpleMessage("Expires"),
     "nailuForgotPassword": MessageLookupByLibrary.simpleMessage(
@@ -1032,12 +1058,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "nailuGift": MessageLookupByLibrary.simpleMessage("Gift cards"),
     "nailuGuide": MessageLookupByLibrary.simpleMessage("User guide"),
+    "nailuHalfYear": MessageLookupByLibrary.simpleMessage("6 months"),
     "nailuHeroHint": MessageLookupByLibrary.simpleMessage(
       "Your world, connected with NaiLu.",
     ),
     "nailuHeroTitle": MessageLookupByLibrary.simpleMessage(
       "A little taller. A little further.",
     ),
+    "nailuHome": MessageLookupByLibrary.simpleMessage("Home"),
     "nailuInvite": MessageLookupByLibrary.simpleMessage("Invite friends"),
     "nailuLogin": MessageLookupByLibrary.simpleMessage("Sign in with NaiLu"),
     "nailuLoginFailed": MessageLookupByLibrary.simpleMessage(
@@ -1049,50 +1077,114 @@ class MessageLookup extends MessageLookupByLibrary {
     "nailuLogout": MessageLookupByLibrary.simpleMessage(
       "Sign out and remove subscription",
     ),
+    "nailuLogoutConfirm": MessageLookupByLibrary.simpleMessage(
+      "Sign out of NaiLu and stop this connection?",
+    ),
     "nailuLongTerm": MessageLookupByLibrary.simpleMessage("No expiry"),
+    "nailuMonthly": MessageLookupByLibrary.simpleMessage("Monthly"),
+    "nailuMonthlyResetHint": MessageLookupByLibrary.simpleMessage(
+      "Recurring plans reset traffic every month. One-time traffic lasts until used up.",
+    ),
+    "nailuMonthlyTraffic": MessageLookupByLibrary.simpleMessage(
+      "Monthly traffic · resets monthly",
+    ),
+    "nailuMyServices": MessageLookupByLibrary.simpleMessage("My services"),
+    "nailuNoCatalog": MessageLookupByLibrary.simpleMessage(
+      "No plans available in this category.",
+    ),
     "nailuNoPlan": MessageLookupByLibrary.simpleMessage(
       "No active subscription. Choose a plan on the website.",
     ),
     "nailuNodes": MessageLookupByLibrary.simpleMessage("Node status"),
     "nailuNotices": MessageLookupByLibrary.simpleMessage("Announcements"),
+    "nailuOneTime": MessageLookupByLibrary.simpleMessage("One-time"),
     "nailuOpenBrowser": MessageLookupByLibrary.simpleMessage(
       "Open authorization page",
     ),
+    "nailuOpening": MessageLookupByLibrary.simpleMessage("Opening…"),
     "nailuOrders": MessageLookupByLibrary.simpleMessage("My orders"),
     "nailuPassword": MessageLookupByLibrary.simpleMessage("Password"),
     "nailuPasswordRequired": MessageLookupByLibrary.simpleMessage(
       "Enter your password",
     ),
     "nailuPayment": MessageLookupByLibrary.simpleMessage("Secure payment"),
+    "nailuPeriodic": MessageLookupByLibrary.simpleMessage("Recurring"),
+    "nailuPlanDetails": MessageLookupByLibrary.simpleMessage("Plan details"),
+    "nailuPlanExpired": MessageLookupByLibrary.simpleMessage(
+      "Your plan has expired. Renew to connect.",
+    ),
     "nailuPlans": MessageLookupByLibrary.simpleMessage("Plans and renewal"),
+    "nailuPlansTab": MessageLookupByLibrary.simpleMessage("Plans"),
+    "nailuQuarterly": MessageLookupByLibrary.simpleMessage("Quarterly"),
+    "nailuRateOne": MessageLookupByLibrary.simpleMessage("Traffic rate 1×"),
+    "nailuRefreshAccount": MessageLookupByLibrary.simpleMessage(
+      "Refresh account",
+    ),
     "nailuRegister": MessageLookupByLibrary.simpleMessage("Create account"),
     "nailuRegistrationHint": MessageLookupByLibrary.simpleMessage(
       "Register and complete verification below, then return to sign in.",
     ),
+    "nailuRemaining": MessageLookupByLibrary.simpleMessage("Remaining"),
     "nailuRememberPassword": MessageLookupByLibrary.simpleMessage(
       "Remember email and password",
     ),
     "nailuRememberPasswordHint": MessageLookupByLibrary.simpleMessage(
       "Saved securely on this device; uncheck to remove",
     ),
+    "nailuReminderHint": MessageLookupByLibrary.simpleMessage(
+      "Delivered by the website notification service",
+    ),
     "nailuRetryVerification": MessageLookupByLibrary.simpleMessage(
       "Reload verification",
     ),
+    "nailuSecurity": MessageLookupByLibrary.simpleMessage(
+      "Password & subscription security",
+    ),
+    "nailuSelectNode": MessageLookupByLibrary.simpleMessage("Select a node"),
     "nailuServices": MessageLookupByLibrary.simpleMessage("NaiLu services"),
     "nailuServicesHint": MessageLookupByLibrary.simpleMessage(
       "Plans, payments and account services stay in sync with the NaiLu website.",
     ),
+    "nailuSoldOut": MessageLookupByLibrary.simpleMessage("Sold out"),
     "nailuSupport": MessageLookupByLibrary.simpleMessage("Support"),
     "nailuSync": MessageLookupByLibrary.simpleMessage("Sync subscription"),
     "nailuSyncComplete": MessageLookupByLibrary.simpleMessage(
       "Subscription synced. Choose a node and connect.",
     ),
+    "nailuSyncFailed": MessageLookupByLibrary.simpleMessage(
+      "Subscription sync failed. Retry before connecting.",
+    ),
+    "nailuSyncPending": MessageLookupByLibrary.simpleMessage(
+      "Subscription not synced yet",
+    ),
+    "nailuSyncing": MessageLookupByLibrary.simpleMessage(
+      "Syncing subscription…",
+    ),
     "nailuTelegram": MessageLookupByLibrary.simpleMessage("Telegram channel"),
+    "nailuThreeYears": MessageLookupByLibrary.simpleMessage("3 years"),
+    "nailuTools": MessageLookupByLibrary.simpleMessage("Tools & settings"),
+    "nailuTotalTraffic": MessageLookupByLibrary.simpleMessage(
+      "Total traffic · no monthly reset",
+    ),
     "nailuTraffic": MessageLookupByLibrary.simpleMessage("Traffic used"),
+    "nailuTrafficExhausted": MessageLookupByLibrary.simpleMessage(
+      "Traffic exhausted. Renew or reset on the website.",
+    ),
+    "nailuTrafficReminder": MessageLookupByLibrary.simpleMessage(
+      "Traffic email reminder",
+    ),
+    "nailuTunMode": MessageLookupByLibrary.simpleMessage("TUN virtual adapter"),
+    "nailuTwoYears": MessageLookupByLibrary.simpleMessage("2 years"),
+    "nailuUnlimited": MessageLookupByLibrary.simpleMessage("Unlimited"),
     "nailuVerification": MessageLookupByLibrary.simpleMessage(
       "Cloudflare verification",
     ),
+    "nailuVpnMode": MessageLookupByLibrary.simpleMessage("VPN / TUN mode"),
+    "nailuWebAccount": MessageLookupByLibrary.simpleMessage(
+      "Website account · automatic sign-in",
+    ),
     "nailuWebsite": MessageLookupByLibrary.simpleMessage("NaiLu website"),
+    "nailuYearly": MessageLookupByLibrary.simpleMessage("1 year"),
     "name": MessageLookupByLibrary.simpleMessage("名前"),
     "navigationBarStyle": MessageLookupByLibrary.simpleMessage("ボトムバー"),
     "network": MessageLookupByLibrary.simpleMessage("ネットワーク"),

@@ -6,6 +6,20 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:material_ui/material_ui.dart';
 
 abstract final class AppGlyphs {
+  static const power = Glyph([
+    GlyphPolyline([GlyphVertex(12, 2.5), GlyphVertex(12, 12)]),
+    GlyphPolyline([
+      GlyphVertex(6, 5.5),
+      GlyphVertex(3.7, 8.5, 2),
+      GlyphVertex(3, 12, 3),
+      GlyphVertex(5.5, 18.5, 3),
+      GlyphVertex(12, 21, 3),
+      GlyphVertex(18.5, 18.5, 3),
+      GlyphVertex(21, 12, 3),
+      GlyphVertex(20.3, 8.5, 2),
+      GlyphVertex(18, 5.5),
+    ]),
+  ]);
   static const dashboard = Glyph([
     GlyphBox(3.5, 3.5, 10.5, 11.5, 2),
     GlyphBox(13.5, 3.5, 20.5, 9.5, 2),

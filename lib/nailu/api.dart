@@ -26,7 +26,7 @@ class NailuApi {
               headers: {
                 'Accept': 'application/json',
                 'Cache-Control': 'no-store',
-                'User-Agent': 'NaiLu/0.2.0',
+                'User-Agent': 'NaiLu/0.3.0',
               },
             ),
           );

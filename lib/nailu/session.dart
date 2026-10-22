@@ -8,8 +8,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api.dart';
 import 'config.dart';
+import 'catalog.dart';
 
 enum NailuPhase { restoring, signedOut, authorizing, signedIn }
+
+enum NailuSyncStatus {
+  idle,
+  syncing,
+  ready,
+  noPlan,
+  expired,
+  exhausted,
+  failed,
+}
 
 abstract interface class NailuTokenStore {
   Future<String?> read(String key);
@@ -57,8 +68,28 @@ class NailuSession extends ChangeNotifier {
   Map<String, dynamic>? authorization;
   String? error;
   bool busy = false;
+  NailuSyncStatus syncStatus = NailuSyncStatus.idle;
+  void setSyncStatus(NailuSyncStatus value) {
+    syncStatus = value;
+    _emit();
+  }
+
+  Future<List<NailuPlan>> plans() => fetchNailuPlans(_api);
+  Future<void> updateReminder(String field, bool value) async {
+    if (!{'remind_expire', 'remind_traffic'}.contains(field)) {
+      throw ArgumentError.value(field);
+    }
+    await _api.value(
+      'user/update',
+      data: {field: value ? 1 : 0},
+      authenticated: true,
+    );
+    await refresh();
+  }
+
   int? managedProfileId;
   int _epoch = 0;
+  int get revision => _epoch;
   bool _disposed = false;
   Timer? _pollTimer;
   Completer<void>? _pollWaiter;
@@ -383,6 +414,7 @@ class NailuSession extends ChangeNotifier {
 
   Future<void> signOut() async {
     final epoch = ++_epoch;
+    syncStatus = NailuSyncStatus.idle;
     busy = true;
     _interruptPolling();
     final token = _api.token;

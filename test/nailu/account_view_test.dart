@@ -37,7 +37,11 @@ void main() {
       };
     await render(tester, session);
     expect(find.text('奈鹿轻享'), findsOneWidget);
-    expect(find.textContaining('2.00 / 100.00 GB'), findsOneWidget);
+    expect(find.textContaining('98.0 GB / 100.0 GB'), findsOneWidget);
+    expect(find.text('t***@example.invalid'), findsOneWidget);
+    expect(find.text('test@example.invalid'), findsNothing);
+    await tester.tap(find.byTooltip('显示或隐藏邮箱'));
+    await tester.pump();
     expect(find.text('test@example.invalid'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

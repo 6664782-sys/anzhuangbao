@@ -11,6 +11,10 @@ import 'config.dart';
 import 'session.dart';
 import 'profiles.dart';
 import 'portal_view.dart';
+import 'plans_view.dart';
+import 'services_view.dart';
+import 'subscription_card.dart';
+import 'package:fl_clash/views/tools.dart';
 
 class NailuAccountBanner extends ConsumerWidget {
   const NailuAccountBanner({super.key});
@@ -39,8 +43,8 @@ class NailuAccountBanner extends ConsumerWidget {
 }
 
 class NailuAccountView extends ConsumerStatefulWidget {
-  const NailuAccountView({super.key});
-
+  const NailuAccountView({super.key, this.embedded = false});
+  final bool embedded;
   @override
   ConsumerState<NailuAccountView> createState() => _NailuAccountViewState();
 }
@@ -48,8 +52,8 @@ class NailuAccountView extends ConsumerStatefulWidget {
 class _NailuAccountViewState extends ConsumerState<NailuAccountView> {
   late final NailuSession _session;
   bool _working = false;
+  bool _hideEmail = true;
   String? _feedback;
-
   @override
   void initState() {
     super.initState();
@@ -81,15 +85,25 @@ class _NailuAccountViewState extends ConsumerState<NailuAccountView> {
   }
 
   Future<void> _sync() async {
-    final synced = await syncNailuProfile(ref, _session);
-    if (mounted) {
-      _feedback = synced
-          ? context.appLocalizations.nailuSyncComplete
-          : context.appLocalizations.nailuNoPlan;
-    }
+    await syncNailuProfile(ref, _session);
   }
 
+  Future<void> _plans() => showExtend<void>(
+    context,
+    props: const ExtendProps(forceFull: true),
+    builder: (_) => CommonScaffold(
+      title: context.appLocalizations.nailuPlans,
+      body: Padding(
+        padding: EdgeInsets.only(top: context.appBarInset),
+        child: const NailuPlansView(),
+      ),
+    ),
+  );
   Future<void> _logout() async {
+    final accepted = await dialogs.showMessage(
+      message: TextSpan(text: context.appLocalizations.nailuLogoutConfirm),
+    );
+    if (accepted != true || !mounted) return;
     final stopped = await ref
         .read(setupActionProvider.notifier)
         .setRunning(false);
@@ -102,119 +116,152 @@ class _NailuAccountViewState extends ConsumerState<NailuAccountView> {
     await _session.signOut();
   }
 
-  Widget _button(String label, VoidCallback? action) =>
-      FilledButton(onPressed: _working ? null : action, child: Text(label));
-
-  Widget _summary(BuildContext context) {
-    final strings = context.appLocalizations;
-    final data = _session.subscription ?? const <String, dynamic>{};
-    final plan = data['plan'];
-    final planName = plan is Map ? plan['name'] as String? : null;
-    final total = (data['transfer_enable'] as num?)?.toDouble() ?? 0;
-    final used =
-        ((data['u'] as num?)?.toDouble() ?? 0) +
-        ((data['d'] as num?)?.toDouble() ?? 0);
-    final expires = (data['expired_at'] as num?)?.toInt();
-    final date = expires == null
-        ? strings.nailuLongTerm
-        : DateTime.fromMillisecondsSinceEpoch(
-            expires * 1000,
-          ).toLocal().toIso8601String().split('T').first;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 12,
-          children: [
-            Text(
-              planName ?? strings.nailuNoPlan,
-              style: AppTextStyle.title2.of(context, emphasized: true),
-            ),
-            Text(
-              '${strings.nailuTraffic}: ${(used / 1073741824).toStringAsFixed(2)} / ${(total / 1073741824).toStringAsFixed(2)} GB',
-            ),
-            LinearProgressIndicator(
-              value: total > 0 ? (used / total).clamp(0, 1) : 0,
-            ),
-            Text('${strings.nailuExpires}: $date'),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                _button(strings.nailuSync, () => unawaited(_run(_sync))),
-                _button(
-                  strings.nailuPlans,
-                  () => unawaited(
-                    _run(() => _portal('plans', strings.nailuPlans)),
-                  ),
-                ),
-                _button(
-                  strings.nailuSupport,
-                  () => unawaited(
-                    _run(() => _portal('tickets', strings.nailuSupport)),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
+  Widget _service(String title, Glyph glyph, String route) => ListItem(
+    leading: GlyphIcon(glyph),
+    title: Text(title),
+    trailing: const GlyphIcon(AppGlyphs.chevronForward),
+    onTap: _working ? null : () => unawaited(_run(() => _portal(route, title))),
+  );
   @override
   Widget build(BuildContext context) {
-    final strings = context.appLocalizations;
-    return CommonScaffold(
-      title: strings.nailuAccount,
-      body: ListenableBuilder(
-        listenable: _session,
-        builder: (context, _) => ListView(
-          padding: EdgeInsets.fromLTRB(16, context.appBarInset + 16, 16, 32),
-          children: [
-            Text(
-              NailuConfig.name,
-              style: AppTextStyle.largeTitle.of(context, emphasized: true),
+    final s = context.appLocalizations;
+    final body = ListenableBuilder(
+      listenable: _session,
+      builder: (context, _) {
+        final email = _session.account?['email'] as String? ?? '';
+        final at = email.indexOf('@');
+        final shownEmail = _hideEmail && at > 0
+            ? '${email.substring(0, 1)}***${email.substring(at)}'
+            : email;
+        final balance = (_session.account?['balance'] as num?) ?? 0;
+        return RefreshIndicator(
+          onRefresh: () => _run(_sync),
+          child: ListView(
+            padding: EdgeInsets.fromLTRB(
+              20,
+              widget.embedded ? 8 : context.appBarInset + 16,
+              20,
+              28,
             ),
-            const SizedBox(height: 12),
-            Text(strings.nailuAccountHint),
-            const SizedBox(height: 24),
-            if (_session.phase == NailuPhase.restoring)
-              const Center(child: CommonCircleLoading()),
-            if (_session.phase == NailuPhase.signedIn) ...[
-              Text(_session.account?['email'] as String? ?? ''),
+            children: [
+              Card(
+                child: ListItem(
+                  leading: const GlyphIcon(AppGlyphs.account),
+                  title: Text(shownEmail),
+                  subtitle: Text(
+                    '${s.nailuBalance}: ¥${(balance / 100).toStringAsFixed(2)}',
+                  ),
+                  trailing: IconButton(
+                    tooltip: s.nailuEmailPrivacy,
+                    onPressed: () => setState(() => _hideEmail = !_hideEmail),
+                    icon: GlyphIcon(
+                      _hideEmail ? AppGlyphs.eye : AppGlyphs.eyeOff,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              NailuSubscriptionCard(
+                onPlans: () => unawaited(_plans()),
+                onRefresh: () => unawaited(_run(_sync)),
+              ),
+              const SizedBox(height: 12),
+              Text(s.nailuMyServices, style: AppTextStyle.headline.of(context)),
+              const SizedBox(height: 8),
+              Card(
+                child: Column(
+                  children: [
+                    _service(s.nailuOrders, AppGlyphs.requests, 'orders'),
+                    _service(s.nailuTraffic, AppGlyphs.speed, 'traffic'),
+                    _service(s.nailuSupport, AppGlyphs.tools, 'tickets'),
+                    _service(s.nailuInvite, AppGlyphs.link, 'invite'),
+                    _service(s.nailuGuide, AppGlyphs.profiles, 'help'),
+                    _service(
+                      s.nailuDiagnostics,
+                      AppGlyphs.verified,
+                      'diagnostics',
+                    ),
+                    ListItem.open(
+                      leading: const GlyphIcon(AppGlyphs.send),
+                      title: Text(s.nailuServices),
+                      widget: const NailuServicesView(),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 16),
-              _summary(context),
+              Card(
+                child: Column(
+                  children: [
+                    for (final field in ['remind_expire', 'remind_traffic'])
+                      SwitchListTile(
+                        title: Text(
+                          field == 'remind_expire'
+                              ? s.nailuExpireReminder
+                              : s.nailuTrafficReminder,
+                        ),
+                        subtitle: Text(s.nailuReminderHint),
+                        value: _session.account?[field] == 1,
+                        onChanged: _working
+                            ? null
+                            : (value) => unawaited(
+                                _run(
+                                  () => _session.updateReminder(field, value),
+                                ),
+                              ),
+                      ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 16),
-              TextButton(
+              Card(
+                child: ListItem.open(
+                  leading: const GlyphIcon(AppGlyphs.tools),
+                  title: Text(s.nailuTools),
+                  widget: const ToolsView(),
+                  forceFull: true,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                s.nailuAccountSettings,
+                style: AppTextStyle.headline.of(context),
+              ),
+              Card(
+                child: Column(
+                  children: [
+                    _service(s.nailuSecurity, AppGlyphs.verified, 'profile'),
+                    _service(
+                      s.nailuWebAccount,
+                      AppGlyphs.openExternal,
+                      'profile',
+                    ),
+                    _service(s.nailuDevices, AppGlyphs.devices, 'devices'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              FilledButton(
                 onPressed: _working ? null : () => unawaited(_run(_logout)),
-                child: Text(strings.nailuLogout),
+                child: Text(s.nailuLogout),
               ),
+              if (_working)
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: LinearProgressIndicator(),
+                ),
+              if (_feedback != null)
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(_feedback!),
+                ),
             ],
-            if (_working)
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: LinearProgressIndicator(),
-              ),
-            if (_feedback != null)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text(_feedback!),
-              ),
-            if (_session.error != null)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text(strings.nailuConnectionError),
-              ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    return widget.embedded
+        ? body
+        : CommonScaffold(title: s.nailuAccount, body: body);
   }
 }

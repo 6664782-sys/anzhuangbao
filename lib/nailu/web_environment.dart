@@ -3,7 +3,9 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
-Future<WebViewEnvironment?> createNailuWebEnvironment() async {
+Future<WebViewEnvironment?> createNailuWebEnvironment({
+  String profile = 'verification',
+}) async {
   if (!Platform.isWindows) return null;
   if (await WebViewEnvironment.getAvailableVersion() == null) {
     throw StateError('Microsoft Edge WebView2 Runtime is required');
@@ -11,7 +13,7 @@ Future<WebViewEnvironment?> createNailuWebEnvironment() async {
   final directory = await getApplicationSupportDirectory();
   return WebViewEnvironment.create(
     settings: WebViewEnvironmentSettings(
-      userDataFolder: path.join(directory.path, 'verification-webview'),
+      userDataFolder: path.join(directory.path, '$profile-webview'),
     ),
   );
 }

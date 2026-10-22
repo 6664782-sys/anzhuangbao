@@ -8250,6 +8250,441 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Home`
+  String get nailuHome {
+    return Intl.message('Home', name: 'nailuHome', desc: '', args: []);
+  }
+
+  /// `Plans`
+  String get nailuPlansTab {
+    return Intl.message('Plans', name: 'nailuPlansTab', desc: '', args: []);
+  }
+
+  /// `All`
+  String get nailuAll {
+    return Intl.message('All', name: 'nailuAll', desc: '', args: []);
+  }
+
+  /// `Recurring`
+  String get nailuPeriodic {
+    return Intl.message('Recurring', name: 'nailuPeriodic', desc: '', args: []);
+  }
+
+  /// `One-time`
+  String get nailuOneTime {
+    return Intl.message('One-time', name: 'nailuOneTime', desc: '', args: []);
+  }
+
+  /// `Monthly`
+  String get nailuMonthly {
+    return Intl.message('Monthly', name: 'nailuMonthly', desc: '', args: []);
+  }
+
+  /// `Quarterly`
+  String get nailuQuarterly {
+    return Intl.message(
+      'Quarterly',
+      name: 'nailuQuarterly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `6 months`
+  String get nailuHalfYear {
+    return Intl.message('6 months', name: 'nailuHalfYear', desc: '', args: []);
+  }
+
+  /// `1 year`
+  String get nailuYearly {
+    return Intl.message('1 year', name: 'nailuYearly', desc: '', args: []);
+  }
+
+  /// `2 years`
+  String get nailuTwoYears {
+    return Intl.message('2 years', name: 'nailuTwoYears', desc: '', args: []);
+  }
+
+  /// `3 years`
+  String get nailuThreeYears {
+    return Intl.message('3 years', name: 'nailuThreeYears', desc: '', args: []);
+  }
+
+  /// `Could not load plans. Check your connection and retry.`
+  String get nailuCatalogError {
+    return Intl.message(
+      'Could not load plans. Check your connection and retry.',
+      name: 'nailuCatalogError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No plans available in this category.`
+  String get nailuNoCatalog {
+    return Intl.message(
+      'No plans available in this category.',
+      name: 'nailuNoCatalog',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recurring plans reset traffic every month. One-time traffic lasts until used up.`
+  String get nailuMonthlyResetHint {
+    return Intl.message(
+      'Recurring plans reset traffic every month. One-time traffic lasts until used up.',
+      name: 'nailuMonthlyResetHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monthly traffic · resets monthly`
+  String get nailuMonthlyTraffic {
+    return Intl.message(
+      'Monthly traffic · resets monthly',
+      name: 'nailuMonthlyTraffic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total traffic · no monthly reset`
+  String get nailuTotalTraffic {
+    return Intl.message(
+      'Total traffic · no monthly reset',
+      name: 'nailuTotalTraffic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unlimited`
+  String get nailuUnlimited {
+    return Intl.message(
+      'Unlimited',
+      name: 'nailuUnlimited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Traffic rate 1×`
+  String get nailuRateOne {
+    return Intl.message(
+      'Traffic rate 1×',
+      name: 'nailuRateOne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Plan details`
+  String get nailuPlanDetails {
+    return Intl.message(
+      'Plan details',
+      name: 'nailuPlanDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Billing period`
+  String get nailuBillingPeriod {
+    return Intl.message(
+      'Billing period',
+      name: 'nailuBillingPeriod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue to checkout`
+  String get nailuChoosePlan {
+    return Intl.message(
+      'Continue to checkout',
+      name: 'nailuChoosePlan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sold out`
+  String get nailuSoldOut {
+    return Intl.message('Sold out', name: 'nailuSoldOut', desc: '', args: []);
+  }
+
+  /// `Opening…`
+  String get nailuOpening {
+    return Intl.message('Opening…', name: 'nailuOpening', desc: '', args: []);
+  }
+
+  /// `Subscription sync failed. Retry before connecting.`
+  String get nailuSyncFailed {
+    return Intl.message(
+      'Subscription sync failed. Retry before connecting.',
+      name: 'nailuSyncFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subscription not synced yet`
+  String get nailuSyncPending {
+    return Intl.message(
+      'Subscription not synced yet',
+      name: 'nailuSyncPending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Syncing subscription…`
+  String get nailuSyncing {
+    return Intl.message(
+      'Syncing subscription…',
+      name: 'nailuSyncing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your plan has expired. Renew to connect.`
+  String get nailuPlanExpired {
+    return Intl.message(
+      'Your plan has expired. Renew to connect.',
+      name: 'nailuPlanExpired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Traffic exhausted. Renew or reset on the website.`
+  String get nailuTrafficExhausted {
+    return Intl.message(
+      'Traffic exhausted. Renew or reset on the website.',
+      name: 'nailuTrafficExhausted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connecting…`
+  String get nailuConnecting {
+    return Intl.message(
+      'Connecting…',
+      name: 'nailuConnecting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected`
+  String get nailuConnected {
+    return Intl.message(
+      'Connected',
+      name: 'nailuConnected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disconnected`
+  String get nailuDisconnected {
+    return Intl.message(
+      'Disconnected',
+      name: 'nailuDisconnected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a node`
+  String get nailuSelectNode {
+    return Intl.message(
+      'Select a node',
+      name: 'nailuSelectNode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `VPN / TUN mode`
+  String get nailuVpnMode {
+    return Intl.message(
+      'VPN / TUN mode',
+      name: 'nailuVpnMode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TUN virtual adapter`
+  String get nailuTunMode {
+    return Intl.message(
+      'TUN virtual adapter',
+      name: 'nailuTunMode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tools & settings`
+  String get nailuTools {
+    return Intl.message(
+      'Tools & settings',
+      name: 'nailuTools',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remaining`
+  String get nailuRemaining {
+    return Intl.message(
+      'Remaining',
+      name: 'nailuRemaining',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My services`
+  String get nailuMyServices {
+    return Intl.message(
+      'My services',
+      name: 'nailuMyServices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account management`
+  String get nailuAccountSettings {
+    return Intl.message(
+      'Account management',
+      name: 'nailuAccountSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show or hide email`
+  String get nailuEmailPrivacy {
+    return Intl.message(
+      'Show or hide email',
+      name: 'nailuEmailPrivacy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expiry email reminder`
+  String get nailuExpireReminder {
+    return Intl.message(
+      'Expiry email reminder',
+      name: 'nailuExpireReminder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Traffic email reminder`
+  String get nailuTrafficReminder {
+    return Intl.message(
+      'Traffic email reminder',
+      name: 'nailuTrafficReminder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delivered by the website notification service`
+  String get nailuReminderHint {
+    return Intl.message(
+      'Delivered by the website notification service',
+      name: 'nailuReminderHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account balance`
+  String get nailuBalance {
+    return Intl.message(
+      'Account balance',
+      name: 'nailuBalance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password & subscription security`
+  String get nailuSecurity {
+    return Intl.message(
+      'Password & subscription security',
+      name: 'nailuSecurity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Website account · automatic sign-in`
+  String get nailuWebAccount {
+    return Intl.message(
+      'Website account · automatic sign-in',
+      name: 'nailuWebAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refresh account`
+  String get nailuRefreshAccount {
+    return Intl.message(
+      'Refresh account',
+      name: 'nailuRefreshAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign out of NaiLu and stop this connection?`
+  String get nailuLogoutConfirm {
+    return Intl.message(
+      'Sign out of NaiLu and stop this connection?',
+      name: 'nailuLogoutConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Device limit`
+  String get nailuDeviceLimit {
+    return Intl.message(
+      'Device limit',
+      name: 'nailuDeviceLimit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connect`
+  String get nailuConnect {
+    return Intl.message('Connect', name: 'nailuConnect', desc: '', args: []);
+  }
+
+  /// `Disconnect`
+  String get nailuDisconnect {
+    return Intl.message(
+      'Disconnect',
+      name: 'nailuDisconnect',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

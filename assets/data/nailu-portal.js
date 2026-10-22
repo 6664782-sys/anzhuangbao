@@ -1,5 +1,7 @@
 (() => {
   if (location.origin !== 'https://nailu.pro' || new URLSearchParams(location.search).get('nailu_client') !== '1') return;
+  if (window.__nailuPortalStarted) return;
+  window.__nailuPortalStarted = true;
   let state = null;
   const send = value => {
     state = value;
@@ -20,7 +22,9 @@
       if (!data || typeof data.auth_data !== 'string' || !data.auth_data) throw new Error('Invalid response');
       localStorage.removeItem('nailu_auth');
       sessionStorage.setItem('nailu_auth', data.auth_data);
-      location.replace('/?nailu_client=1#/' + route);
+      const search = new URLSearchParams(location.search);
+      search.delete('verify');
+      location.replace('/?' + search.toString() + '#/' + route);
     }).catch(() => send('error'));
     return;
   }
@@ -29,6 +33,23 @@
     style.textContent = '.sidebar,.topbar{display:none!important}.main{margin-left:0!important;padding-top:20px!important;min-height:100vh!important}body{padding-left:0!important}.modal{max-height:92vh!important}';
     document.head.append(style);
     send('ready');
+    const query = new URLSearchParams(location.search);
+    const plan = query.get('nailu_plan');
+    const period = query.get('nailu_period');
+    const periods = new Set(['month_price','quarter_price','half_year_price','year_price','two_year_price','three_year_price','onetime_price']);
+    if (/^[1-9][0-9]*$/.test(plan || '') && periods.has(period)) {
+      let tries = 0;
+      const timer = setInterval(() => {
+        const select = document.querySelector('[data-plan-period="' + plan + '"]');
+        const button = document.querySelector('[data-action="purchase"][data-id="' + plan + '"]');
+        if (select && button && !button.disabled && Array.from(select.options).some(option => option.value === period)) {
+          clearInterval(timer);
+          select.value = period;
+          select.dispatchEvent(new Event('change', {bubbles:true}));
+          button.click();
+        } else if (++tries >= 50) clearInterval(timer);
+      }, 200);
+    }
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready, {once:true});
   else ready();
