@@ -73,10 +73,10 @@ jobs:
           NAILU_ANDROID_STORE_PASSWORD: ${{ secrets.NAILU_ANDROID_STORE_PASSWORD }}
           NAILU_ANDROID_KEY_PASSWORD: ${{ secrets.NAILU_ANDROID_KEY_PASSWORD }}
           NAILU_ANDROID_KEY_ALIAS: ${{ secrets.NAILU_ANDROID_KEY_ALIAS }}
-        run: flutter build apk --release --split-per-abi
+        run: flutter build apk --release --split-per-abi --dart-define=APP_ENV=stable
       - name: Build Windows portable bundle
         if: matrix.platform == 'windows'
-        run: flutter build windows --release
+        run: flutter build windows --release --dart-define=APP_ENV=stable
       - name: Build Windows installer
         if: matrix.platform == 'windows'
         shell: pwsh
@@ -99,7 +99,7 @@ jobs:
         run: plutil -replace FLTEnableImpeller -bool NO macos/Runner/Info.plist
       - name: Build macOS app
         if: matrix.platform == 'macos'
-        run: flutter build macos --release
+        run: flutter build macos --release --dart-define=APP_ENV=stable
       - name: macOS unsigned distribution archive
         if: matrix.platform == 'macos'
         run: ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/NaiLu.app build/NaiLu-macOS-${{ matrix.arch }}-unsigned.zip

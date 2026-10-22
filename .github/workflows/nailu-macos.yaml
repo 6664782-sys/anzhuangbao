@@ -10,44 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  source:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    outputs:
-      commit: ${{ steps.source.outputs.commit }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Import NaiLu source once
-        id: source
-        shell: bash
-        run: |
-          set -euo pipefail
-          incoming_hash=$(sha256sum nailu.patch.gz | cut -d ' ' -f 1)
-          applied_hash=$(cat .nailu-source.sha256 2>/dev/null || true)
-          if [ "$incoming_hash" != "$applied_hash" ]; then
-            echo '4c236d190d908797f2ce0935da8b2dedc089c0df4903f7f27667fd1fca271627  nailu.patch.gz' | sha256sum --check
-            git init "$RUNNER_TEMP/nailu-source"
-            git -C "$RUNNER_TEMP/nailu-source" remote add upstream https://github.com/chen08209/FlClash.git
-            git -C "$RUNNER_TEMP/nailu-source" fetch --depth=1 upstream 8d4f9744948751f1273fe871e1d05276fac09b0e
-            git -C "$RUNNER_TEMP/nailu-source" checkout --detach FETCH_HEAD
-            gzip -dc nailu.patch.gz > "$RUNNER_TEMP/nailu.patch"
-            git -C "$RUNNER_TEMP/nailu-source" apply --binary "$RUNNER_TEMP/nailu.patch"
-            rsync -a --exclude=.git --exclude=.github/workflows/nailu-macos.yaml "$RUNNER_TEMP/nailu-source/" ./
-            cp README.md README.upstream.md
-            cp NAILU.md README.md
-            printf "%s\n" "$incoming_hash" > .nailu-source.sha256
-            git add -A
-            git update-index --add --cacheinfo 160000,8380d0e7462f061a964323e9bf3129a236fcc5d5,core/Clash.Meta
-            git -c user.name='NaiLu Build' -c user.email='295174040+6664782-sys@users.noreply.github.com' commit -m 'Update NaiLu client theme and in-app account services'
-            git push origin HEAD:main
-          fi
-          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
   macos:
-    needs: source
     strategy:
       fail-fast: false
       matrix:
@@ -60,8 +23,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ needs.source.outputs.commit }}
           submodules: recursive
+      - name: Apply requested client changes in build checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '75ef00607d57636f7e11866be66241585323ef927da3d2ccfcdb6dbec7eb0a0c  nailu.patch.gz' | sha256sum --check
+          if ! grep -q 'version: 0.3.0+2026102303' pubspec.yaml; then
+            gzip -dc nailu.patch.gz > "$RUNNER_TEMP/nailu.patch"
+            git apply --binary --exclude=.github/workflows/nailu.yaml "$RUNNER_TEMP/nailu.patch"
+          fi
       - uses: actions/setup-go@v5
         with:
           go-version: '1.27.1'
@@ -92,12 +63,12 @@ jobs:
       - name: Analyze
         run: flutter analyze --no-fatal-infos
       - name: Build macOS
-        run: flutter build macos --release
+        run: flutter build macos --release --dart-define=APP_ENV=stable
       - name: Package app
         run: |
           mkdir -p dist
-          ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/NaiLu.app dist/NaiLu-0.2.0-macOS-${{ matrix.arch }}-unsigned.zip
-          hdiutil create -volname '奈鹿 NaiLu' -srcfolder build/macos/Build/Products/Release/NaiLu.app -ov -format UDZO dist/NaiLu-0.2.0-macOS-${{ matrix.arch }}-unsigned.dmg
+          ditto -c -k --sequesterRsrc --keepParent build/macos/Build/Products/Release/NaiLu.app dist/NaiLu-0.3.0-macOS-${{ matrix.arch }}-unsigned.zip
+          hdiutil create -volname '奈鹿 NaiLu' -srcfolder build/macos/Build/Products/Release/NaiLu.app -ov -format UDZO dist/NaiLu-0.3.0-macOS-${{ matrix.arch }}-unsigned.dmg
           shasum -a 256 dist/* > dist/SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
@@ -107,11 +78,11 @@ jobs:
       - name: Prepare corresponding source
         if: matrix.arch == 'arm64'
         run: |
-          git archive --format=zip -o NaiLu-0.2.0-source.zip HEAD
+          python3 -c 'import pathlib,subprocess,zipfile; a=zipfile.ZipFile("NaiLu-0.3.0-source.zip","w",zipfile.ZIP_DEFLATED); paths=subprocess.check_output(["git","ls-files","-c","-o","--exclude-standard","-z"]).decode().split("\0"); [a.write(p,p) for p in paths if p and pathlib.Path(p).is_file()]; a.close()' 
           git -C core/Clash.Meta archive --format=zip --prefix=core/Clash.Meta/ -o "$RUNNER_TEMP/nailu-core-source.zip" HEAD
-          python3 -c 'import os,zipfile; a=zipfile.ZipFile("NaiLu-0.2.0-source.zip","a"); b=zipfile.ZipFile(os.environ["RUNNER_TEMP"]+"/nailu-core-source.zip"); [a.writestr(i,b.read(i.filename)) for i in b.infolist() if not i.is_dir()]; a.close(); b.close()'
+          python3 -c 'import os,zipfile; a=zipfile.ZipFile("NaiLu-0.3.0-source.zip","a"); b=zipfile.ZipFile(os.environ["RUNNER_TEMP"]+"/nailu-core-source.zip"); [a.writestr(i,b.read(i.filename)) for i in b.infolist() if not i.is_dir()]; a.close(); b.close()'
       - uses: actions/upload-artifact@v4
         if: matrix.arch == 'arm64'
         with:
           name: NaiLu-source
-          path: NaiLu-0.2.0-source.zip
+          path: NaiLu-0.3.0-source.zip
