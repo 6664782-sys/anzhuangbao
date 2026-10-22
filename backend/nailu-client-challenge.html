@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src https://challenges.cloudflare.com 'unsafe-inline'; frame-src https://challenges.cloudflare.com; connect-src https://challenges.cloudflare.com; style-src 'unsafe-inline'; base-uri 'none'; object-src 'none'">
+  <title>NaiLu verification</title>
+  <style>html,body{margin:0;padding:0;background:transparent}#verification{min-height:65px}</style>
+</head>
+<body>
+  <div id="verification"></div>
+  <script>
+    let pendingToken = null;
+    function deliver(token) {
+      pendingToken = token;
+      if (window.flutter_inappwebview && window.flutter_inappwebview.callHandler) {
+        window.flutter_inappwebview.callHandler('nailuChallenge', token);
+      }
+    }
+    window.addEventListener('flutterInAppWebViewPlatformReady', () => deliver(pendingToken));
+    window.nailuVerificationReady = function () {
+      turnstile.render('#verification', {
+        sitekey: '0x4AAAAAAFeyPq0RteW29V_j',
+        action: 'login', size: 'flexible', theme: 'auto',
+        callback: token => deliver(token),
+        'expired-callback': () => deliver(null),
+        'error-callback': () => deliver(null),
+        'timeout-callback': () => deliver(null)
+      });
+    };
+  </script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=nailuVerificationReady&amp;render=explicit" async defer></script>
+</body>
+</html>

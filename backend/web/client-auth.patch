@@ -1,0 +1,37 @@
+--- a/public/theme/nailu/assets/app.js
++++ b/public/theme/nailu/assets/app.js
+@@ -446,13 +446,25 @@
+ 
+ 
+ 
++
++  function clientAuthCode(){
++    const code=new URLSearchParams(location.hash.split('?')[1]||'').get('user_code')||sessionStorage.getItem('nailu_client_code')||'';
++    if(!/^[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}$/.test(code))throw new Error('授权码无效，请从奈鹿客户端重新登录');
++    return code;
++  }
++  async function clientAuthorizationPage(){
++    const code=clientAuthCode(),r=await api('user/nailu/client/details?user_code='+encodeURIComponent(code)),d=r.data;
++    const platform={android:'Android',windows:'Windows',macos:'macOS'}[d.platform]||'客户端';
++    return `<section class="panel"><h2>授权奈鹿 NaiLu 客户端</h2><p>您正在为 ${esc(platform)} 客户端登录账户。</p><p>请核对客户端显示的授权码：</p><h2>${esc(code)}</h2><p>只有您本人刚刚发起登录、且授权码一致时，才点击确认。不要确认别人发送给您的授权请求。</p><div class="button-row"><button class="button" data-action="client-authorize">确认授权此设备</button><a class="button secondary" href="#/dashboard">取消并返回</a></div><p id="client-auth-result" role="status"></p></section>`;
++  }
+   function takeReturnRoute(){const route=sessionStorage.getItem('nailu_return_route');sessionStorage.removeItem('nailu_return_route');return route&&(views[route]||/^order\/[A-Za-z0-9_-]{1,100}$/.test(route))?route:'dashboard';}
+-  const views={dashboard,notices,nodes,plans,orders,invite,traffic,profile,devices,tickets,gift,help,downloads,diagnostics,community,timeline,videos:()=>help('视频')};
++  const views={'client-auth':clientAuthorizationPage,dashboard,notices,nodes,plans,orders,invite,traffic,profile,devices,tickets,gift,help,downloads,diagnostics,community,timeline,videos:()=>help('视频')};
+ 
+   async function render(){
+ 
+     const raw=location.hash.replace(/^#\/?/,'').split('?')[0]||'dashboard';
+ 
++    if(raw==='client-auth'){try{sessionStorage.setItem('nailu_client_code',clientAuthCode());}catch(e){toast(e.message);location.hash='/dashboard';return;}}
+     if(raw==='social-callback'){await completeSocialLogin();return;}
+ 
+     if(!state.token){if(views[raw]||/^order\/[A-Za-z0-9_-]{1,100}$/.test(raw))sessionStorage.setItem('nailu_return_route',raw);loginView(['register','forget'].includes(raw)?raw:'login');return;}
+@@ -611,6 +623,7 @@
+     'commission-transfer':()=>commissionModal('transfer'),
+     'commission-withdraw':()=>commissionModal('withdraw'),
+ 
++    'client-authorize':async el=>{el.disabled=true;try{await api('user/nailu/client/approve',{user_code:clientAuthCode()});sessionStorage.removeItem('nailu_client_code');$('#client-auth-result').textContent='授权成功，请返回奈鹿客户端。此授权码已确认，请勿重复操作。';el.remove();}catch(e){el.disabled=false;throw e;}},
+     'complete-email':el=>{const input=$('#email');input.value=el.dataset.email;closeEmailSuggestions();input.focus();closeEmailSuggestions();},
+ 
+     'social-login':el=>{const provider=el.dataset.provider;if(!['google','telegram'].includes(provider))return;sessionStorage.setItem('nailu_social_remember',$('[name=remember]')?.checked===false?'0':'1');const invite=$('#invite-code')?.value.trim()||'';location.assign('/auth/social/'+provider+'/start'+(invite?'?invite_code='+encodeURIComponent(invite):''));},
