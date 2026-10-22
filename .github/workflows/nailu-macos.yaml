@@ -1,4 +1,5 @@
 name: NaiLu macOS builds
+# Build the committed client source with read-only repository access.
 
 on:
   push:

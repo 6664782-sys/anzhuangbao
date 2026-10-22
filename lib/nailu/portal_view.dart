@@ -112,7 +112,7 @@ class _NailuPortalViewState extends ConsumerState<NailuPortalView> {
                 ),
               );
             }
-            if (!snapshot.hasData) {
+            if (snapshot.connectionState != ConnectionState.done || !snapshot.hasData) {
               return const Center(child: CommonCircleLoading());
             }
             return Stack(
